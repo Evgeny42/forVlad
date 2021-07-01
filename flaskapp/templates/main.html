@@ -1,0 +1,16 @@
+{% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}Lab3{% endblock %}
+{% block content %}
+{{ wtf.quick_form(form, method='post',enctype="multipart/form-data", action="/") }}
+
+{% if image %}
+<table>
+ <tr>
+  <h3>Отредактированное изображение: </h3>
+  <p>{{image}}
+  <p><img src="{{image}}" class="img-rounded" alt="My Image" width = 224 height=224 />
+ </tr>
+</table>
+{% endif %}
+{% endblock %}
