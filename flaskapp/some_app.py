@@ -37,19 +37,19 @@ app.config['SECRET_KEY'] = SECRET_KEY
 bootstrap = Bootstrap(app)
     
 def intensivity(imagePath):
-    if request.method == 'POST':
-        img = Image.open(imagePath)
-        lum_img = img[:, :, 0]
-        fig = plt.figure()
-        ax = fig.add_subplot(1, 2, 1)
-        imgplot = plt.imshow(img)
-        ax.set_title('Before')
-        plt.colorbar(ticks=[1, 50, 150, 250], orientation='horizontal')
-        ax = fig.add_subplot(1, 2, 2)
-        imgplot = plt.imshow(lum_img)
-        imgplot.set_clim(100.0, 0.7)
-        ax.set_title('After')
-        plt.colorbar(ticks=[1, 50, 100, 200], orientation='horizontal')    
+    img = Image.open(imagePath)
+    lum_img = np.asarray(img)
+    lum_img = lum_img[:, :, 0]
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 2, 1)
+    imgplot = plt.imshow(img)
+    ax.set_title('Before')
+    plt.colorbar(ticks=[1, 50, 150, 250], orientation='horizontal')
+    ax = fig.add_subplot(1, 2, 2)
+    imgplot = plt.imshow(lum_img)
+    imgplot.set_clim(100.0, 0.7)
+    ax.set_title('After')
+    plt.colorbar(ticks=[1, 50, 100, 200], orientation='horizontal')      
 
 @app.route("/", methods=['GET', 'POST'])
 def main():
