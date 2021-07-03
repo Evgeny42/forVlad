@@ -27,7 +27,7 @@ app = Flask(__name__)
 class MyForm(FlaskForm):
     upload = FileField('Загрузите изображение', validators = 
       [FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Только картинки!')])
-    recaptcha = RecaptchaField()
+#     recaptcha = RecaptchaField()
     color1 = StringField("Введите 1 из 3 вариантов (r/g/b)")
     color2 = StringField("Введите 1 из 3 вариантов (r/g/b)")
     color3 = StringField("Введите 1 из 3 вариантов (r/g/b)")
