@@ -39,8 +39,8 @@ app.config['SECRET_KEY'] = SECRET_KEY
 
 bootstrap = Bootstrap(app)
     
-def intensivity(imagePath):
-    data = form.slider.data
+def intensivity(imagePath, data):
+    
     img = Image.open(imagePath)
     lum_img = np.asarray(img)
     lum_img = lum_img[:, :, 1]
@@ -67,7 +67,8 @@ def main():
         graphPath = os.path.join('./static/images', f'myFig.png')
         # Сохраняем наше загруженное изображение
         form.upload.data.save(imagePath)
-        intensivity(imagePath)
+        data = form.slider.data
+        intensivity(imagePath, data)
     return render_template('main.html', form=form, image=imagePath, graph=graphPath)
 # Запускаем наше приложение
 if __name__ == "__main__":
