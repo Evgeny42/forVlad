@@ -36,6 +36,21 @@ app.config['SECRET_KEY'] = SECRET_KEY
 
 bootstrap = Bootstrap(app)
     
+def intensivity(imagePath):
+    if request.method == 'POST':
+        img = Image.open(imagePath)
+        lum_img = img[:, :, 0]
+        fig = plt.figure()
+        ax = fig.add_subplot(1, 2, 1)
+        imgplot = plt.imshow(img)
+        ax.set_title('Before')
+        plt.colorbar(ticks=[1, 50, 150, 250], orientation='horizontal')
+        ax = fig.add_subplot(1, 2, 2)
+        imgplot = plt.imshow(lum_img)
+        imgplot.set_clim(100.0, 0.7)
+        ax.set_title('After')
+        plt.colorbar(ticks=[1, 50, 100, 200], orientation='horizontal')    
+
 @app.route("/", methods=['GET', 'POST'])
 def main():
     form = MyForm()
@@ -45,6 +60,7 @@ def main():
         imagePath = os.path.join('./static/images', f'photo.{photo}')
         # Сохраняем наше загруженное изображение
         form.upload.data.save(imagePath)
+        intensivity(imagePath)
     return render_template('main.html', form=form, image=imagePath)
 # Запускаем наше приложение
 if __name__ == "__main__":
