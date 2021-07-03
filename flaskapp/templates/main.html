@@ -7,21 +7,9 @@
 {% if image %}
 <table>
  <tr>
-  <h3>Отредактированное изображение: </h3>
+  <h3>Изображение: </h3>
   <p>{{image}}
   <p><img src="{{image}}" class="img-rounded" alt="My Image" width = 224 height=224 />
- </tr>
- <tr>
-  <h4>График распределения цветов для измененного изображения: </h4>
-  <p><img src="{{graph1}}" class="img-rounded" alt="My FGraph" width = 320 height=260 />
- </tr>
- <tr>
-  <h4>График среднего цвета по горизонтали: </h4>
-  <p><img src="{{graph2}}" class="img-rounded" alt="My SGraph" width = 320 height=260 />
- </tr>
- <tr>
-  <h4>График среднего цвета по вертикали: </h4>
-  <p><img src="{{graph3}}" class="img-rounded" alt="My ЕGraph" width = 320 height=260 />
  </tr>
 </table>
 {% endif %}
