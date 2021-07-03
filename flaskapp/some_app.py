@@ -55,13 +55,15 @@ def intensivity(imagePath):
 def main():
     form = MyForm()
     imagePath = None
+    graphPath = None
     if form.validate_on_submit():
-        photo = form.upload.data.filename.split('.')[-1]
-        imagePath = os.path.join('./static/images', f'photo.{photo}')
+        pType = form.upload.data.filename.split('.')[-1]
+        imagePath = os.path.join('./static/images', f'photo.{pType}')
+        graphPath = os.path.join('./static/images', f'myFig.png')
         # Сохраняем наше загруженное изображение
         form.upload.data.save(imagePath)
         intensivity(imagePath)
-    return render_template('main.html', form=form, image=imagePath)
+    return render_template('main.html', form=form, image=imagePath, graph=graphPath)
 # Запускаем наше приложение
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=5000)
