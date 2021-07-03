@@ -37,10 +37,10 @@ class MyForm(FlaskForm):
 SECRET_KEY = 'secret'
 app.config['UPLOAD_FOLDER'] = IMAGE_FOLDER
 app.config['SECRET_KEY'] = SECRET_KEY
-app.config['RECAPTCHA_USE_SSL'] = False
-app.config['RECAPTCHA_PUBLIC_KEY'] = '6LenXSsbAAAAABPqpQZ3RpkDt42hxynW7j7SZxpm'
-app.config['RECAPTCHA_PRIVATE_KEY'] = '6LenXSsbAAAAALFvL7os3RcyzKnYADCcTW37GBPH'
-app.config['RECAPTCHA_OPTIONS'] = {'theme': 'white'}
+# app.config['RECAPTCHA_USE_SSL'] = False
+# app.config['RECAPTCHA_PUBLIC_KEY'] = '6LenXSsbAAAAABPqpQZ3RpkDt42hxynW7j7SZxpm'
+# app.config['RECAPTCHA_PRIVATE_KEY'] = '6LenXSsbAAAAALFvL7os3RcyzKnYADCcTW37GBPH'
+# app.config['RECAPTCHA_OPTIONS'] = {'theme': 'white'}
 bootstrap = Bootstrap(app)
 
 def problem(path, color1, color2, color3):
