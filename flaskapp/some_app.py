@@ -29,7 +29,9 @@ app = Flask(__name__)
 class MyForm(FlaskForm):
     upload = FileField('Загрузите изображение', validators = 
       [FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Только картинки!')])
-    slider = IntegerRangeField('select', [NumberRange(min=1, max=1000)])
+    sliderR = IntegerRangeField('Интенсивность красного', [NumberRange(min=0.1, max=3)])
+    sliderG = IntegerRangeField('Интенсивность зеленого', [NumberRange(min=0.1, max=3)])
+    sliderB = IntegerRangeField('Интенсивность голубого', [NumberRange(min=0.1, max=3)])
     submit = SubmitField('Применить')    
     
     
@@ -39,22 +41,26 @@ app.config['SECRET_KEY'] = SECRET_KEY
 
 bootstrap = Bootstrap(app)
     
-def intensivity(imagePath, data):
-    
+def intensity(imagePath, data):
     img = Image.open(imagePath)
-    lum_img = np.asarray(img)
-    lum_img = lum_img[:, :, 1]
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 2, 1)
-    imgplot = plt.imshow(img)
-    ax.set_title('Before')
-    plt.colorbar(ticks=[1, 50, 150, 250], orientation='horizontal')
-    ax = fig.add_subplot(1, 2, 2)
-    imgplot = plt.imshow(lum_img)
-    imgplot.set_clim(data, 0.7)
-    ax.set_title('After')
-    plt.colorbar(ticks=[1, 50, 100, 200], orientation='horizontal')
-    plt.savefig("./static/images/myFig.png")
+    imarr = np.asarray(img)
+    for i in range(3): # here
+        imarr[:,:,i] = imarr[:,:,i] * data[i]
+    plt.imshow(imarr)
+#     img = Image.open(imagePath)
+#     lum_img = np.asarray(img)
+#     lum_img = lum_img[:, :, 1]
+#     fig = plt.figure()
+#     ax = fig.add_subplot(1, 2, 1)
+#     imgplot = plt.imshow(img)
+#     ax.set_title('Before')
+#     plt.colorbar(ticks=[1, 50, 150, 250], orientation='horizontal')
+#     ax = fig.add_subplot(1, 2, 2)
+#     imgplot = plt.imshow(lum_img)
+#     imgplot.set_clim(data, 0.7)
+#     ax.set_title('After')
+#     plt.colorbar(ticks=[1, 50, 100, 200], orientation='horizontal')
+#     plt.savefig("./static/images/myFig.png")
 
 @app.route("/", methods=['GET', 'POST'])
 def main():
@@ -67,8 +73,9 @@ def main():
         graphPath = os.path.join('./static/images', f'myFig.png')
         # Сохраняем наше загруженное изображение
         form.upload.data.save(imagePath)
-        data = form.slider.data
-        intensivity(imagePath, data)
+
+        intens = [form.sliderR.data, form.sliderG.data, form.sliderB.data]
+        intensity(imagePath, intens)
     return render_template('main.html', form=form, image=imagePath, graph=graphPath)
 # Запускаем наше приложение
 if __name__ == "__main__":
