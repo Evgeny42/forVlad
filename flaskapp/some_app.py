@@ -152,8 +152,8 @@ def main():
         graphPath3 = os.path.join('./static/images', f'vertical.png')
         # Сохраняем наше загруженное изображение
         form.upload.data.save(imagePath)
-        problem(imagePath, form.color1.data, form.color2.data, form.color3.data)
-    return render_template('main.html', form=form, image=imagePath, graph1=graphPath1, graph2=graphPath2, graph3=graphPath3)
+#         problem(imagePath, form.color1.data, form.color2.data, form.color3.data)
+    return render_template('main.html', form=form, image=imagePath)
 # Запускаем наше приложение
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=5000)
