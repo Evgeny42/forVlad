@@ -49,7 +49,8 @@ def intensivity(imagePath):
     imgplot = plt.imshow(lum_img)
     imgplot.set_clim(100.0, 0.7)
     ax.set_title('After')
-    plt.colorbar(ticks=[1, 50, 100, 200], orientation='horizontal')      
+    plt.colorbar(ticks=[1, 50, 100, 200], orientation='horizontal')
+    plt.savefig("./static/images/myFig.png")
 
 @app.route("/", methods=['GET', 'POST'])
 def main():
