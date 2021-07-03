@@ -39,7 +39,7 @@ bootstrap = Bootstrap(app)
 def intensivity(imagePath):
     img = Image.open(imagePath)
     lum_img = np.asarray(img)
-    lum_img = lum_img[:, :, 0]
+    lum_img = lum_img[:, :, 1]
     fig = plt.figure()
     ax = fig.add_subplot(1, 2, 1)
     imgplot = plt.imshow(img)
