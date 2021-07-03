@@ -16,6 +16,8 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from wtforms.fields.html5 import IntegerRangeField
+from wtforms.validators import NumberRange
 
 # инициализируем папку с изображением 
 IMAGE_FOLDER = os.path.join('static', 'images')
@@ -27,6 +29,7 @@ app = Flask(__name__)
 class MyForm(FlaskForm):
     upload = FileField('Загрузите изображение', validators = 
       [FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Только картинки!')])
+    slider = IntegerRangeField('select', [NumberRange(min=1, max=1000)])
     submit = SubmitField('Применить')    
     
     
@@ -37,6 +40,7 @@ app.config['SECRET_KEY'] = SECRET_KEY
 bootstrap = Bootstrap(app)
     
 def intensivity(imagePath):
+    data = form.slider.data
     img = Image.open(imagePath)
     lum_img = np.asarray(img)
     lum_img = lum_img[:, :, 1]
@@ -47,7 +51,7 @@ def intensivity(imagePath):
     plt.colorbar(ticks=[1, 50, 150, 250], orientation='horizontal')
     ax = fig.add_subplot(1, 2, 2)
     imgplot = plt.imshow(lum_img)
-    imgplot.set_clim(100.0, 0.7)
+    imgplot.set_clim(data, 0.7)
     ax.set_title('After')
     plt.colorbar(ticks=[1, 50, 100, 200], orientation='horizontal')
     plt.savefig("./static/images/myFig.png")
