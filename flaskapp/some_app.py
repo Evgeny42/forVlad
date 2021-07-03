@@ -27,10 +27,6 @@ app = Flask(__name__)
 class MyForm(FlaskForm):
     upload = FileField('Загрузите изображение', validators = 
       [FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Только картинки!')])
-#     recaptcha = RecaptchaField()
-    color1 = StringField("Введите 1 из 3 вариантов (r/g/b)")
-    color2 = StringField("Введите 1 из 3 вариантов (r/g/b)")
-    color3 = StringField("Введите 1 из 3 вариантов (r/g/b)")
     submit = SubmitField('Применить')    
     
     
@@ -147,12 +143,8 @@ def main():
     if form.validate_on_submit():
         photo = form.upload.data.filename.split('.')[-1]
         imagePath = os.path.join('./static/images', f'photo.{photo}')
-        graphPath1 = os.path.join('./static/images', f'myFig1.png')
-        graphPath2 = os.path.join('./static/images', f'horizontal.png')
-        graphPath3 = os.path.join('./static/images', f'vertical.png')
         # Сохраняем наше загруженное изображение
         form.upload.data.save(imagePath)
-#         problem(imagePath, form.color1.data, form.color2.data, form.color3.data)
     return render_template('main.html', form=form, image=imagePath)
 # Запускаем наше приложение
 if __name__ == "__main__":
