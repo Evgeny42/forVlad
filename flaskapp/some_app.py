@@ -29,9 +29,9 @@ app = Flask(__name__)
 class MyForm(FlaskForm):
     upload = FileField('Загрузите изображение', validators = 
       [FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Только картинки!')])
-    sliderR = IntegerRangeField('Интенсивность красного', [NumberRange(min=0.1, max=3)])
-    sliderG = IntegerRangeField('Интенсивность зеленого', [NumberRange(min=0.1, max=3)])
-    sliderB = IntegerRangeField('Интенсивность голубого', [NumberRange(min=0.1, max=3)])
+    sliderR = DecimalRangeField('Интенсивность красного', [NumberRange(min=0.1, max=3)])
+    sliderG = DecimalRangeField('Интенсивность зеленого', [NumberRange(min=0.1, max=3)])
+    sliderB = DecimalRangeField('Интенсивность голубого', [NumberRange(min=0.1, max=3)])
     submit = SubmitField('Применить')    
     
     
@@ -43,24 +43,25 @@ bootstrap = Bootstrap(app)
     
 def intensity(imagePath, data):
     img = Image.open(imagePath)
-    imarr = np.asarray(img)
-    for i in range(3): # here
-        imarr[:,:,i] = imarr[:,:,i] * data[i]
-    plt.imshow(imarr)
-#     img = Image.open(imagePath)
-#     lum_img = np.asarray(img)
-#     lum_img = lum_img[:, :, 1]
-#     fig = plt.figure()
-#     ax = fig.add_subplot(1, 2, 1)
-#     imgplot = plt.imshow(img)
-#     ax.set_title('Before')
-#     plt.colorbar(ticks=[1, 50, 150, 250], orientation='horizontal')
-#     ax = fig.add_subplot(1, 2, 2)
-#     imgplot = plt.imshow(lum_img)
-#     imgplot.set_clim(data, 0.7)
-#     ax.set_title('After')
-#     plt.colorbar(ticks=[1, 50, 100, 200], orientation='horizontal')
-#     plt.savefig("./static/images/myFig.png")
+
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 2, 1)
+    imgplot = plt.imshow(img)
+
+    ax.set_title('Before')
+    plt.colorbar(ticks=[1, 50, 150, 250], orientation='horizontal')
+
+    pixs = img.load()
+    for i in range(img.size[0]):
+        for j in range(img.size[1]):
+            pixs[i,j] = (pixs[i,j][0]*data[0],pixs[i,j][1]*data[1],pixs[i,j][2]*data[2])
+
+    ax = fig.add_subplot(1, 2, 2)
+    imgplot = plt.imshow(img)
+    ax.set_title('After')
+    plt.colorbar(ticks=[1, 50, 100, 200], orientation='horizontal')
+
+    plt.savefig("./static/images/myFig.png")
 
 @app.route("/", methods=['GET', 'POST'])
 def main():
@@ -76,6 +77,7 @@ def main():
 
         intens = [form.sliderR.data, form.sliderG.data, form.sliderB.data]
         intensity(imagePath, intens)
+        
     return render_template('main.html', form=form, image=imagePath, graph=graphPath)
 # Запускаем наше приложение
 if __name__ == "__main__":
