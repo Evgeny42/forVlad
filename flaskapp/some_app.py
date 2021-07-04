@@ -54,7 +54,7 @@ def intensity(imagePath, data):
     pixs = img.load()
     for i in range(img.size[0]):
         for j in range(img.size[1]):
-            pixs[i,j] = (pixs[i,j][0]*data[0],pixs[i,j][1]*data[1],pixs[i,j][2]*data[2])
+            pixs[i,j] = (ceil(pixs[i,j][0]*data[0]), ceil(pixs[i,j][1]*data[1]), ceil(pixs[i,j][2]*data[2]))
 
     ax = fig.add_subplot(1, 2, 2)
     imgplot = plt.imshow(img)
@@ -74,7 +74,7 @@ def main():
         # Сохраняем наше загруженное изображение
         form.upload.data.save(imagePath)
 
-        intens = [ceil(form.sliderR.data/25), ceil(form.sliderG.data/25), ceil(form.sliderB.data/25)]
+        intens = [form.sliderR.data/25), form.sliderG.data/25, form.sliderB.data/25]
         intensity(imagePath, intens)
         
     return render_template('main.html', form=form, image=imagePath, graph=graphPath)
