@@ -29,9 +29,9 @@ app = Flask(__name__)
 class MyForm(FlaskForm):
     upload = FileField('Загрузите изображение', validators = 
       [FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Только картинки!')])
-    sliderR = IntegerRangeField('Интенсивность красного', [NumberRange(min=1, max=1000)])
-    sliderG = IntegerRangeField('Интенсивность зеленого', [NumberRange(min=1, max=1000)])
-    sliderB = IntegerRangeField('Интенсивность голубого', [NumberRange(min=1, max=1000)])
+    sliderR = IntegerRangeField('Интенсивность красного', [NumberRange(min=1, max=100)])
+    sliderG = IntegerRangeField('Интенсивность зеленого', [NumberRange(min=1, max=100)])
+    sliderB = IntegerRangeField('Интенсивность голубого', [NumberRange(min=1, max=100)])
     submit = SubmitField('Применить')    
     
     
@@ -49,7 +49,6 @@ def intensity(imagePath, data):
     imgplot = plt.imshow(img)
 
     ax.set_title('Before')
-    plt.colorbar(ticks=[1, 50, 150, 250], orientation='horizontal')
 
     pixs = img.load()
     for i in range(img.size[0]):
@@ -59,7 +58,6 @@ def intensity(imagePath, data):
     ax = fig.add_subplot(1, 2, 2)
     imgplot = plt.imshow(img)
     ax.set_title('After')
-    plt.colorbar(ticks=[1, 50, 100, 200], orientation='horizontal')
 
     plt.savefig("./static/images/myFig.png")
 
