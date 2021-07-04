@@ -74,7 +74,7 @@ def main():
         # Сохраняем наше загруженное изображение
         form.upload.data.save(imagePath)
 
-        intens = [form.sliderR.data/25), form.sliderG.data/25, form.sliderB.data/25]
+        intens = [form.sliderR.data/25, form.sliderG.data/25, form.sliderB.data/25]
         intensity(imagePath, intens)
         
     return render_template('main.html', form=form, image=imagePath, graph=graphPath)
