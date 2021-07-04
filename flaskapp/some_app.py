@@ -16,7 +16,7 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from wtforms.fields.html5 import IntegerRangeField, DecimalRangeField
+from wtforms.fields.html5 import IntegerRangeField
 from wtforms.validators import NumberRange
 
 # инициализируем папку с изображением 
@@ -29,9 +29,9 @@ app = Flask(__name__)
 class MyForm(FlaskForm):
     upload = FileField('Загрузите изображение', validators = 
       [FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Только картинки!')])
-    sliderR = DecimalRangeField('Интенсивность красного', [NumberRange(min=0.1, max=3)])
-    sliderG = DecimalRangeField('Интенсивность зеленого', [NumberRange(min=0.1, max=3)])
-    sliderB = DecimalRangeField('Интенсивность голубого', [NumberRange(min=0.1, max=3)])
+    sliderR = IntegerRangeField('Интенсивность красного', [NumberRange(min=1, max=1000)])
+    sliderG = IntegerRangeField('Интенсивность зеленого', [NumberRange(min=1, max=1000)])
+    sliderB = IntegerRangeField('Интенсивность голубого', [NumberRange(min=1, max=1000)])
     submit = SubmitField('Применить')    
     
     
@@ -75,7 +75,7 @@ def main():
         # Сохраняем наше загруженное изображение
         form.upload.data.save(imagePath)
 
-        intens = [form.sliderR.data, form.sliderG.data, form.sliderB.data]
+        intens = [form.sliderR.data/10, form.sliderG.data/10, form.sliderB.data/10]
         intensity(imagePath, intens)
         
     return render_template('main.html', form=form, image=imagePath, graph=graphPath)
