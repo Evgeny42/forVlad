@@ -7,13 +7,17 @@
 {% if image %}
 <table>
  <tr>
-  <h3>Исходное изображение: </h3>
+  <h4>Исходное изображение: </h3>
   <p>{{image}}
   <p><img src="{{image}}" class="img-rounded" alt="My Image" width = 224 height=224 />
  </tr>
  <tr>
   <h4>График: </h4>
-  <p><img src="{{graph}}" class="img-rounded" alt="My Graph" width = 500 height=300 />
+  <p><img src="{{graph1}}" class="img-rounded" alt="My Graph" width = 500 height=300 />
+ </tr>
+ <tr>
+  <h4>График: </h4>
+  <p><img src="{{graph2}}" class="img-rounded" alt="My Graph" width = 500 height=300 />
  </tr>
 </table>
 {% endif %}
