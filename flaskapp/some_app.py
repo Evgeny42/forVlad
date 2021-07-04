@@ -1,3 +1,5 @@
+import os
+from math import ceil
 from flask import Flask
 from flask import render_template
 from flask_wtf import FlaskForm, RecaptchaField
@@ -6,7 +8,6 @@ from wtforms.validators import DataRequired
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from flask_bootstrap import Bootstrap
 from werkzeug.utils import secure_filename
-import os
 from flask import request
 from flask import Response
 import base64
@@ -73,7 +74,7 @@ def main():
         # Сохраняем наше загруженное изображение
         form.upload.data.save(imagePath)
 
-        intens = [int(form.sliderR.data/25), int(form.sliderG.data/25), int(form.sliderB.data/25)]
+        intens = [ceil(form.sliderR.data/25), ceil(form.sliderG.data/25), ceil(form.sliderB.data/25)]
         intensity(imagePath, intens)
         
     return render_template('main.html', form=form, image=imagePath, graph=graphPath)
