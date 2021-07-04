@@ -16,7 +16,7 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-from wtforms.fields.html5 import IntegerRangeField
+from wtforms.fields.html5 import IntegerRangeField, DecimalRangeField
 from wtforms.validators import NumberRange
 
 # инициализируем папку с изображением 
