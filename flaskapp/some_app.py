@@ -23,16 +23,13 @@ from wtforms.validators import NumberRange
 # инициализируем папку с изображением 
 IMAGE_FOLDER = os.path.join('static', 'images')
 app = Flask(__name__)
-# Визуальная составляющая страницы описывается 
-# с помощью наследования нашего класса от FlaskForm
-# в котором мы инициализируем поле для загрузки файла,
-# поле капчи, текстовое поле и кнопку подтверждения
+
 class MyForm(FlaskForm):
-    upload = FileField('Загрузите изображение', validators = 
-      [FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Только картинки!')])
-    sliderR = IntegerRangeField('Интенсивность красного', [NumberRange(min=1, max=100)])
-    sliderG = IntegerRangeField('Интенсивность зеленого', [NumberRange(min=1, max=100)])
-    sliderB = IntegerRangeField('Интенсивность голубого', [NumberRange(min=1, max=100)])
+    upload = FileField('Загрузите изображение', validators = [FileRequired(), FileAllowed(['jpg', 'png', 'jpeg'], 'Только картинки!')])
+    sliderR = IntegerRangeField('Интенсивность красного', [NumberRange(min=0, max=100)])
+    sliderG = IntegerRangeField('Интенсивность зеленого', [NumberRange(min=0, max=100)])
+    sliderB = IntegerRangeField('Интенсивность голубого', [NumberRange(min=0, max=100)])
+    sliderRGB = IntegerRangeField('Общая интенсивность', [NumberRange(min=0, max=100)])
     submit = SubmitField('Применить')    
     
     
@@ -43,41 +40,54 @@ app.config['SECRET_KEY'] = SECRET_KEY
 bootstrap = Bootstrap(app)
     
 def intensity(imagePath, data):
-    img = Image.open(imagePath)
+    img1 = Image.open(imagePath)
+    img2 = Image.open(imagePath)
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 2, 1)
+    imgplot = plt.imshow(img1)
+    ax.set_title('Before')
+    pixs = img1.load()
+    for i in range(img1.size[0]):
+        for j in range(img1.size[1]):
+            pixs[i,j] = (ceil(pixs[i,j][0]*data[0]), ceil(pixs[i,j][1]*data[1]), ceil(pixs[i,j][2]*data[2]))
+    ax = fig.add_subplot(1, 2, 2)
+    imgplot = plt.imshow(img1)
+    ax.set_title('After')
+    plt.savefig("./static/images/my1Fig.png")
+    plt.close()
 
     fig = plt.figure()
     ax = fig.add_subplot(1, 2, 1)
-    imgplot = plt.imshow(img)
-
+    imgplot = plt.imshow(img2)
     ax.set_title('Before')
-
-    pixs = img.load()
-    for i in range(img.size[0]):
-        for j in range(img.size[1]):
-            pixs[i,j] = (ceil(pixs[i,j][0]*data[0]), ceil(pixs[i,j][1]*data[1]), ceil(pixs[i,j][2]*data[2]))
-
+    pixs = img2.load()
+    for i in range(img2.size[0]):
+        for j in range(img2.size[1]):
+            pixs[i,j] = (ceil(pixs[i,j][0]*data[3]), ceil(pixs[i,j][1]*data[3]), ceil(pixs[i,j][2]*data[3]))
     ax = fig.add_subplot(1, 2, 2)
-    imgplot = plt.imshow(img)
+    imgplot = plt.imshow(img2)
     ax.set_title('After')
-
-    plt.savefig("./static/images/myFig.png")
+    plt.savefig("./static/images/my2Fig.png")
+    
 
 @app.route("/", methods=['GET', 'POST'])
 def main():
     form = MyForm()
     imagePath = None
-    graphPath = None
+    graph1Path = None
+    graph2Path = None
     if form.validate_on_submit():
         pType = form.upload.data.filename.split('.')[-1]
         imagePath = os.path.join('./static/images', f'photo.{pType}')
-        graphPath = os.path.join('./static/images', f'myFig.png')
+        graph1Path = os.path.join('./static/images', f'my1Fig.png')
+        graph2Path = os.path.join('./static/images', f'my2Fig.png')
         # Сохраняем наше загруженное изображение
         form.upload.data.save(imagePath)
 
-        intens = [form.sliderR.data/25, form.sliderG.data/25, form.sliderB.data/25]
+        intens = [form.sliderR.data/25, form.sliderG.data/25, form.sliderB.data/25, form.sliderRGB.data/25]
         intensity(imagePath, intens)
         
-    return render_template('main.html', form=form, image=imagePath, graph=graphPath)
+    return render_template('main.html', form=form, image=imagePath, graph1=graph1Path, graph2=graph2Path)
 # Запускаем наше приложение
 if __name__ == "__main__":
     app.run(host='127.0.0.1', port=5000)
