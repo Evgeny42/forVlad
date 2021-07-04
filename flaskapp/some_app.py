@@ -42,6 +42,9 @@ bootstrap = Bootstrap(app)
 def intensity(imagePath, data):
     img1 = Image.open(imagePath)
     img2 = Image.open(imagePath)
+    if img1.size[0] > 600 or img1.size[1] > 600:
+        img2 = img2.resize([600,int(600*(img1.size[1]/img1.size[0]))])
+        img1 = img1.resize([600,int(600*(img1.size[1]/img1.size[0]))])
     fig = plt.figure()
     ax = fig.add_subplot(1, 2, 1)
     imgplot = plt.imshow(img1)
